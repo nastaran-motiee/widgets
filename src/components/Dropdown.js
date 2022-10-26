@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
-const Dropdown = ({ options }) => {
+
+const Dropdown = ({ options, selected, onSelectedChange }) => {
+    const [open, setOpen] = useState(false);
     const renderedOptions = options.map((option) => {
+        if (option.value === selected.value) {
+            return null;
+        }
+
         return (
-            <div className="item" key={option.value}>
-                <div className={`ui ${option.value} empty circular label`}></div>
+            <div className="item" key={option.value} onClick={() => onSelectedChange(option)}>
+
                 {option.label}
             </div>
         );
@@ -12,10 +18,12 @@ const Dropdown = ({ options }) => {
     return (
         <div className="ui form">
             <div className="ui field">
-                <div className="ui labeled icon dropdown selection visible active">
+                <label className="label">Select a Color</label>
+                <div className={`ui labeled icon dropdown ${open ? 'visible active' : ''} selection`}
+                    onClick={() => setOpen(!open)}>
                     <i className="dropdown icon"></i>
-                    <span className="text">Select Color</span>
-                    <div className="menu visible transition">
+                    <span className="text">{selected.label}</span>
+                    <div className={`menu ${open ? 'visible transition' : ''}`}>
                         {renderedOptions}
                     </div>
                 </div>
